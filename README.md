@@ -2,7 +2,8 @@
 <img src="https://i.imgur.com/FWkt4dB.png">
 
 ## <a href="http://mzero.space/lab/ttt/">TRY ME!</a>
-## AI LOGIC:
+
+## AI Logic:
 - If the player is about to win, stop them
 
 - If not try to go for the middle box
