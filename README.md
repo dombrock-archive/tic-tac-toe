@@ -1,10 +1,10 @@
 # Unbeatable Tic-Tac-Toe
 ## AI LOGIC:
--if the player is about to win, stop them
+- If the player is about to win, stop them
 
--if not try to go for the middle box
+- If not try to go for the middle box
 
--if occupied place randomly in an open box
+- If occupied place randomly in an open box
 
 The board is split into 9 boxes. Each box has a predetermined amount of win conditions.
 
