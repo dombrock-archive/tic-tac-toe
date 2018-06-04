@@ -1,7 +1,7 @@
 # Unbeatable Tic-Tac-Toe
 <img src="https://i.imgur.com/FWkt4dB.png">
 
-<a href="http://mzero.space/lab/ttt/">DEMO</a>
+## <a href="http://mzero.space/lab/ttt/">TRY ME!</a>
 ## AI LOGIC:
 - If the player is about to win, stop them
 
