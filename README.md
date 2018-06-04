@@ -1,4 +1,5 @@
 # Unbeatable Tic-Tac-Toe
+![alt text](https://imgur.com/a/pHviBPV "Logo Title Text 1")
 ## AI LOGIC:
 - If the player is about to win, stop them
 
