@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+body{
+    background:white;
+    text-align:center;
+    font-family: 'Raleway', sans-serif;
+    background-image:url("../img/grad.jpg");
+}
+h1{
+    padding-top:15vh;
+    color:white;
+}
+hr{
+    box-shadow:2px 2px 5px black;
+}
+a{
+    color:white;
+    text-decoration: none;
+}
+.wrap{
+    max-width:365px;
+    margin:0 auto;
+}
+.reset-area{
+    text-align:right;
+}
+.reset{
+    background-color:orangered;
+    color:white;
+    display:inline-block;
+    padding:1em;
+    box-shadow:2px 2px 5px black;
+    transition:padding 0.2s, background 0.2s;
+    font-weight:bold;
+}
+.reset:hover{
+    background:#a6c43a;
+    padding-left:2em;
+    padding-right:2em;
+}
+.board{
+    margin:0 auto;
+    padding:1em;
+    background:dimgray;
+    display:inline-block;
+    box-shadow:5px 5px 10px black;
+}
+.btn{
+    font-size:5em;
+    background:gainsboro;
+    display:inline-block;
+    margin:0.1em;
+    width:1em;
+    box-shadow:2px 2px 5px black;
+    transition:background 0.75s;
+}
+.btn:hover{
+    background:#c4e0b1;
+}
+.message-area{
+    min-height:4.5em;    
+}
+.message{
+    background:orangered;
+    color:white;
+    display:inline-block;
+    padding:0.5em;
+    margin:1em;
+    box-shadow:2px 2px 5px black;
+}
+.links-area{
+    color:white;
+}
+.btn-fade{
+    animation-name:aimove;
+    animation-duration: 4s;
+}
+@keyframes aimove {
+    from {background: orangered;}
+    to {background: gainsboro;}
+}
+.btn-fade-win{
+    animation-name:win;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+@keyframes win {
+    0% {background: orangered;}
+    50% {background: gainsboro;}
+    100% {background: orangered;}
+}
+@media screen and (max-width: 992px) {
+    h1{
+        padding-top:0;
+    }
+}
