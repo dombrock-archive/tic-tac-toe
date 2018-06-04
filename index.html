@@ -1,0 +1,293 @@
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous">
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<div class="wrap">
+    <h1>Unbeatable Tic-Tac-Toe</h1>
+    <div class="board">
+        <div class="btn" id="box-0">_</div><div class="btn" id="box-1">_</div><div class="btn" id="box-2">_</div>
+        <br>
+        <div class="btn" id="box-3">_</div><div class="btn" id="box-4">_</div><div class="btn" id="box-5">_</div>
+        <br>
+        <div class="btn" id="box-6">_</div><div class="btn" id="box-7">_</div><div class="btn" id="box-8">_</div>
+    </div>
+    <br>
+    <div class="message-area">
+        <div class="message"></div>
+    </div>
+    <br>
+    <div class="reset-area">
+        <div class="reset" onclick="location.reload();">RESET</div>
+    </div>
+</div>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Raleway');
+    body{
+        background:white;
+        text-align:center;
+        font-family: 'Raleway', sans-serif;
+        background-image:url("grad.jpg");
+    }
+    h1{
+        padding-top:15vh;
+        color:white;
+    }
+    hr{
+        box-shadow:2px 2px 5px black;
+    }
+    .wrap{
+        max-width:365px;
+        margin:0 auto;
+    }
+    .reset-area{
+        text-align:right;
+    }
+    .reset{
+        background-color:orangered;
+        color:white;
+        display:inline-block;
+        padding:1em;
+        box-shadow:2px 2px 5px black;
+        transition:padding 0.2s, background 0.2s;
+        font-weight:bold;
+    }
+    .reset:hover{
+        background:#a6c43a;
+        padding-left:2em;
+        padding-right:2em;
+    }
+    .board{
+        margin:0 auto;
+        padding:1em;
+        background:dimgray;
+        display:inline-block;
+        box-shadow:5px 5px 10px black;
+    }
+    .btn{
+        font-size:5em;
+        background:gainsboro;
+        display:inline-block;
+        margin:0.1em;
+        width:1em;
+        box-shadow:2px 2px 5px black;
+        transition:background 0.75s;
+    }
+    .btn:hover{
+        background:#c4e0b1;
+    }
+    .message-area{
+        min-height:4.5em;    
+    }
+    .message{
+        background:orangered;
+        color:white;
+        display:inline-block;
+        padding:0.5em;
+        margin:1em;
+        box-shadow:2px 2px 5px black;
+    }
+    .btn-fade{
+        animation-name:example;
+        animation-duration: 4s;
+    }
+    @keyframes example {
+        from {background: orangered;}
+        to {background: gainsboro;}
+    }
+    .btn-fade-win{
+        animation-name:example2;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+    }
+    @keyframes example2 {
+        0% {background: orangered;}
+        50% {background: gainsboro;}
+        100% {background: orangered;}
+    }
+    @media screen and (max-width: 992px) {
+        h1{
+            padding-top:0;
+        }
+    }
+</style>
+<script>
+    game_over = false;
+    turn = "player";
+    var checks = [
+            // 0
+            [[1,2],[3,6],[4,8]],
+            // 1
+            [[0,2],[4,7]],
+            // 2
+            [[0,1],[5,8],[6,4]],
+            // 3
+            [[0,6],[4,5]],
+            // 4
+            [[0,8],[1,7],[2,6],[3,5]],
+            // 5
+            [[2,8],[3,4]],
+            // 6
+            [[0,3],[4,2],[7,8]],
+            // 7
+            [[1,4],[6,8]],
+            // 8
+            [[0,4],[2,5],[6,7]]
+            ];
+
+    var cached_val = "_";
+    $(".btn").hover(function(){
+        cached_val = $(this).html()
+        if($(this).html()!="0" && $(this).html()!="X"){
+            $(this).html("X");
+        }
+    },function(){
+        $(this).html(cached_val);
+    });
+
+    $(".btn").click(function(){
+        if(turn!="player"){
+            SetMsg("Wait your turn!");
+        }
+        if(cached_val=="0" || cached_val=="X"){
+            SetMsg("INVALID MOVE!");
+            $(self).html(cached_val);
+        }
+        else if(WinConditions()){
+            return;
+        }
+        else{
+            console.log("PLAYER MOVE");
+            cached_val = "X"
+            turn = "AI";
+            AIMove();
+            if(game_over==false){
+                $(".message").fadeOut();
+            }
+        }
+        
+        
+    });
+
+    function SetMsg(message){
+        $(".message").fadeIn("slow");
+        $(".message").html(message);
+    }
+
+
+    function WinConditions(){
+        var boxes = [];
+        $(".btn").each(function(index){
+            boxes.push($(this).html());
+        });
+        for (check_num = 0; check_num < checks.length; check_num++) { 
+            if(WinCheckSpace(boxes,check_num)){
+                return true;
+            }
+        } 
+        var blanks = 0;
+        
+        for (box_num = 0; box_num < boxes.length;box_num++){
+            if(boxes[box_num]=="_"){
+                blanks = blanks+1;
+            }
+        }
+        
+        if(blanks==0){
+            SetMsg("The board is full and this move does not result in a win.");
+            game_over = true;
+            return "full";
+        }
+    }
+    function WinCheckSpace(boxes,space){
+            fin = false;
+            for(i=0;i<checks[space].length;i++){
+                if(WinCheck(boxes,space,checks[space][i][0],checks[space][i][1])){
+                    fin = true;
+                    game_over = true;
+                    //alert("fin"+space+checks[space][i][0]+checks[space][i][1]);
+                    $("#box-"+space).addClass("btn-fade-win");
+                    $("#box-"+checks[space][i][0]).addClass("btn-fade-win");
+                    $("#box-"+checks[space][i][1]).addClass("btn-fade-win");
+                }
+            }
+            if(fin){
+                game_over = true;
+                return true;
+            }
+            return false;
+
+    }
+    function WinCheck(boxes, one, two, three){
+        if(boxes[one] == "X" && boxes[two]=="X" && boxes[three]=="X"){
+            SetMsg("You Won Somehow... Did you cheat??");
+            return true;
+        }else if(boxes[one] == "0" && boxes[two]=="0" && boxes[three]=="0"){
+            SetMsg("You Lost!");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    function AICheckSpace(boxes,space){
+        if(boxes[space]!="0" && boxes[space] !="X"){
+            var hit = false;
+            for(i=0;i<checks[space].length;i++){
+                if(AICheck(boxes,checks[space][i][0],checks[space][i][1])){
+                    hit = true;
+                }
+            }
+            if(hit){
+                $("#box-"+space).html("0");
+                $("#box-"+space).addClass("btn-fade");
+                return true;
+            }
+            return false;
+        }
+    }
+    function AIMove(){
+        if(turn!="AI"){
+            alert("AI IS ATTEMPTING TO MOVE OUT OF TURN");
+        }
+        console.log("AI MOVE");
+        var boxes = [];
+        $(".btn").each(function(index){
+            boxes.push($(this).html());
+        });
+        if(WinConditions()){
+            return;
+        }
+        var moved = false;
+        for (check_num = 0; check_num < checks.length; check_num++) { 
+            if(AICheckSpace(boxes,check_num)){
+                moved = true;
+            }
+        }   
+        if(moved == false){
+            var choice = 4;
+            while(boxes[choice]=="X" || boxes[choice]=="0"){
+                choice = Math.floor(Math.random() * 9);
+            }
+            $("#box-"+choice).html("0");
+            $("#box-"+choice).addClass("btn-fade");
+
+        }
+        if(WinConditions()){
+            return;
+        }
+        turn="player";
+        
+    }
+    function AICheck(boxes,one,two){
+        if(boxes[one] == "X" && boxes[two]=="X"){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    $(".message").fadeOut(0);
+</script>
